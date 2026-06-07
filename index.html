@@ -16,29 +16,30 @@
             background: linear-gradient(135deg, #ffe5ec 0%, #ffb3c6 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
-            perspective: 1200px; /* Wichtig für den 3D-Effekt der Tür */
+            perspective: 1200px; /* Wichtig für den 3D-Effekt */
         }
 
-        /* Container für das Liebesgeständnis (liegt HINTER der Tür) */
+        /* Container für das Liebesgeständnis */
         .love-letter-container {
             position: absolute;
             text-align: center;
             max-width: 600px;
+            width: 90%;
             padding: 40px;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
             opacity: 0;
             transform: scale(0.8);
-            transition: all 1.5s ease-in-out;
-            transition-delay: 0.5s; /* Wartet, bis die Tür sich leicht geöffnet hat */
+            transition: all 1.2s ease-in-out;
             z-index: 1;
+            box-sizing: border-box;
         }
 
         .love-letter-container h1 {
             color: #ff477e;
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             margin-bottom: 20px;
         }
 
@@ -60,7 +61,7 @@
             position: relative;
             width: 220px;
             height: 380px;
-            background: #6f4e37; /* Holzrahmen-Farbe */
+            background: #6f4e37; 
             border: 8px solid #523a28;
             border-radius: 4px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
@@ -74,11 +75,11 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background: #b56576; /* Elegantes Altrosa/Rot für die Tür */
+            background: #b56576; 
             box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
             border-radius: 2px;
-            transform-origin: left center; /* Tür öffnet sich von links */
-            transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left center; 
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -87,70 +88,53 @@
             box-sizing: border-box;
         }
 
-        /* Tür-Details (Kassetten-Optik für mehr Eleganz) */
-        .door::before {
+        /* Tür-Details */
+        .door::before, .door::after {
             content: '';
             position: absolute;
-            top: 10%;
             left: 10%;
             width: 80%;
             height: 35%;
             border: 3px solid rgba(255,255,255,0.2);
             box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
-
-        .door::after {
-            content: '';
-            position: absolute;
-            bottom: 10%;
-            left: 10%;
-            width: 80%;
-            height: 35%;
-            border: 3px solid rgba(255,255,255,0.2);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
-        }
+        .door::before { top: 10%; }
+        .door::after { bottom: 10%; }
 
         /* Der Türknauf */
         .doorknob {
             width: 20px;
             height: 20px;
-            background: radial-gradient(circle, #ffd700 0%, #b8860b 100%); /* Goldener Knauf */
+            background: radial-gradient(circle, #ffd700 0%, #b8860b 100%); 
             border-radius: 50%;
             box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
             z-index: 10;
-            transition: transform 0.3s;
         }
 
-        .door:hover .doorknob {
-            transform: scale(1.1);
-        }
-
-        /* --- ANIMATIONS-ZUSTÄNDE (wenn geöffnet) --- */
+        /* --- ANIMATIONS-ZUSTÄNDE --- */
         
-        .door-frame.open {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.0);
-            border-color: transparent;
-            background: transparent;
-            pointer-events: none; /* Verhindert, dass man die unsichtbare Tür nochmal klickt */
-        }
-
-        /* Tür schwingt im 3D-Raum auf */
+        /* 1. Schritt: Tür schwingt auf */
         .door-frame.open .door {
-            transform: rotateY(-130deg);
-            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            transform: rotateY(-140deg);
         }
 
-        /* Brief/Text blendet sich sanft ein */
-        .door-frame.open ~ .love-letter-container {
+        /* 2. Schritt: Ganzer Rahmen weicht nach links aus und blendet aus */
+        .door-frame.disappear {
+            transform: translateX(-200%) scale(0.5);
+            opacity: 0;
+            transition: all 1s ease-in-out;
+        }
+
+        /* Sobald die Tür weg ist, wird dieser Zustand für den Brief getriggert */
+        .love-letter-container.visible {
             opacity: 1;
             transform: scale(1);
         }
 
         /* Herz-Klopfen Animation */
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
             50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
         }
 
         /* Hinweis-Text über der Tür */
@@ -163,6 +147,11 @@
             font-weight: bold;
             font-size: 1.1rem;
             animation: float 2s infinite ease-in-out;
+            transition: opacity 0.5s;
+        }
+
+        .door-frame.open .hint {
+            opacity: 0;
         }
 
         @keyframes float {
@@ -173,15 +162,17 @@
 </head>
 <body>
 
+    <!-- Tür-Element -->
     <div class="door-frame" id="doorFrame" onclick="openDoor()">
         <div class="hint">Öffne mich... ✨</div>
-        <div class="door">
+        <div class="door" id="actualDoor">
             <div class="doorknob"></div>
         </div>
     </div>
 
-    <div class="love-letter-container">
-        <h1>Für die wunderbarste Person ❤️</h1>
+    <!-- Liebeserklärungs-Element -->
+    <div class="love-letter-container" id="loveLetter">
+        <h1>An die wunderbarste Person ❤️</h1>
         <p>
             Seit du in mein Leben getreten bist, ist jeder Tag so viel schöner. 
             Ich wollte dir auf diesem Weg einfach mal sagen, wie unglaublich wichtig du mir bist 
@@ -192,10 +183,25 @@
     </div>
 
     <script>
-        // Funktion, die beim Klick auf die Tür ausgeführt wird
         function openDoor() {
             const doorFrame = document.getElementById('doorFrame');
+            const actualDoor = document.getElementById('actualDoor');
+            const loveLetter = document.getElementById('loveLetter');
+
+            // 1. Tür-Öffnen-Animation starten
             doorFrame.classList.add('open');
+
+            // 2. Sobald die Tür fertig aufgeschwungen ist (nach 1.5s), 
+            // lassen wir den Rahmen verschwinden und zeigen den Brief
+            actualDoor.addEventListener('transitionend', () => {
+                doorFrame.classList.add('disappear');
+                loveLetter.classList.add('visible');
+                
+                // Nach der Disappear-Animation den Rahmen komplett aus dem DOM-Layout entfernen
+                setTimeout(() => {
+                    doorFrame.style.display = 'none';
+                }, 1000);
+            }, { once: true }); // { once: true } sorgt dafür, dass das Event nur einmal feuert
         }
     </script>
 
