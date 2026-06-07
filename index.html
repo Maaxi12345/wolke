@@ -3,395 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberCraft | Creative OnePage</title>
+    <title>Für meine Traumfrau ❤️</title>
     <style>
-        /* --- DESIGN SYSTEM & RESETS --- */
-        :root {
-            --bg-color: #0a0a12;
-            --text-color: #f3f4f6;
-            --accent-color: #00f2fe;
-            --secondary-accent: #4facfe;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 255, 255, 0.08);
-        }
-
-        * {
+        /* Grundstyling & Romantischer Hintergrund */
+        body {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffb3c6 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            perspective: 1200px; /* Wichtig für den 3D-Effekt der Tür */
         }
 
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            overflow-x: hidden;
+        /* Container für das Liebesgeständnis (liegt HINTER der Tür) */
+        .love-letter-container {
+            position: absolute;
+            text-align: center;
+            max-width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 1.5s ease-in-out;
+            transition-delay: 0.5s; /* Wartet, bis die Tür sich leicht geöffnet hat */
+            z-index: 1;
+        }
+
+        .love-letter-container h1 {
+            color: #ff477e;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .love-letter-container p {
+            color: #4a4a4a;
+            font-size: 1.2rem;
             line-height: 1.6;
         }
 
-        /* --- BACKGROUND CANVAS --- */
-        #bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #141526 0%, #0a0a12 100%);
+        .heart {
+            color: #ff477e;
+            font-size: 3rem;
+            animation: pulse 1.5s infinite;
+            margin-top: 20px;
         }
 
-        /* --- NAVIGATION --- */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 1.5rem 10%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            backdrop-filter: blur(12px);
-            background: rgba(10, 10, 18, 0.7);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            background: linear-gradient(45deg, var(--accent-color), var(--secondary-accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        nav a {
-            color: var(--text-color);
-            text-decoration: none;
-            margin-left: 2rem;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: var(--accent-color);
-        }
-
-        /* --- SECTIONS (COMMON) --- */
-        section {
-            min-height: 100vh;
-            padding: 8rem 10% 4rem 10%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
+        /* 3D-Tür-Rahmen */
+        .door-frame {
             position: relative;
+            width: 220px;
+            height: 380px;
+            background: #6f4e37; /* Holzrahmen-Farbe */
+            border: 8px solid #523a28;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+            z-index: 2;
+            transition: all 1s ease;
         }
 
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 4px;
-            background: var(--accent-color);
-            margin: 0.5rem auto 0 auto;
+        /* Die eigentliche Tür */
+        .door {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #b56576; /* Elegantes Altrosa/Rot für die Tür */
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
             border-radius: 2px;
-        }
-
-        /* --- HERO SECTION --- */
-        #home {
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hero-title {
-            font-size: 4rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-title span {
-            background: linear-gradient(45deg, var(--accent-color), var(--secondary-accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: #9ca3af;
-            max-width: 600px;
-            margin-bottom: 2.5rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.75rem 2rem;
-            background: linear-gradient(45deg, var(--secondary-accent), var(--accent-color));
-            color: #000;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
-        }
-
-        /* --- WORK SECTION --- */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            backdrop-filter: blur(5px);
-            transition: transform 0.3s, border-color 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-color);
-        }
-
-        .card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--accent-color);
-        }
-
-        /* --- CONTACT SECTION --- */
-        #contact form {
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            padding: 2.5rem;
-            border-radius: 16px;
-            backdrop-filter: blur(5px);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-            color: #9ca3af;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-color);
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        button[type="submit"] {
-            width: 100%;
-            padding: 0.75rem;
-            border: none;
-            background: linear-gradient(45deg, var(--secondary-accent), var(--accent-color));
-            color: #000;
-            font-weight: 600;
-            border-radius: 8px;
+            transform-origin: left center; /* Tür öffnet sich von links */
+            transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 20px;
+            box-sizing: border-box;
         }
 
-        button[type="submit"]:hover {
-            opacity: 0.9;
+        /* Tür-Details (Kassetten-Optik für mehr Eleganz) */
+        .door::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 35%;
+            border: 3px solid rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
         }
 
-        /* --- FOOTER --- */
-        footer {
+        .door::after {
+            content: '';
+            position: absolute;
+            bottom: 10%;
+            left: 10%;
+            width: 80%;
+            height: 35%;
+            border: 3px solid rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        /* Der Türknauf */
+        .doorknob {
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, #ffd700 0%, #b8860b 100%); /* Goldener Knauf */
+            border-radius: 50%;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+            z-index: 10;
+            transition: transform 0.3s;
+        }
+
+        .door:hover .doorknob {
+            transform: scale(1.1);
+        }
+
+        /* --- ANIMATIONS-ZUSTÄNDE (wenn geöffnet) --- */
+        
+        .door-frame.open {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.0);
+            border-color: transparent;
+            background: transparent;
+            pointer-events: none; /* Verhindert, dass man die unsichtbare Tür nochmal klickt */
+        }
+
+        /* Tür schwingt im 3D-Raum auf */
+        .door-frame.open .door {
+            transform: rotateY(-130deg);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        }
+
+        /* Brief/Text blendet sich sanft ein */
+        .door-frame.open ~ .love-letter-container {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Herz-Klopfen Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* Hinweis-Text über der Tür */
+        .hint {
+            position: absolute;
+            top: -60px;
+            width: 100%;
             text-align: center;
-            padding: 2rem;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.9rem;
-            color: #6b7280;
+            color: #6f4e37;
+            font-weight: bold;
+            font-size: 1.1rem;
+            animation: float 2s infinite ease-in-out;
         }
 
-        /* --- RESPONSIVENESS --- */
-        @media (max-width: 768px) {
-            .hero-title { font-size: 2.5rem; }
-            nav { display: none; } /* Vereinfachung für die OnePage */
-            header { justify-content: center; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
-
-    <header>
-        <div class="logo">CYBER_CRAFT</div>
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#work">Projekte</a>
-            <a href="#contact">Kontakt</a>
-        </nav>
-    </header>
-
-    <section id="home">
-        <h1 class="hero-title">Wir erschaffen <span>digitale Zukunft</span>.</h1>
-        <p class="hero-subtitle">High-End Webentwicklung kombiniert mit progressivem Design. Sauberer Code trifft auf maximale Performance.</p>
-        <a href="#work" class="btn">Projekte ansehen</a>
-    </section>
-
-    <section id="work">
-        <h2 class="section-title">Ausgewählte Arbeiten</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>01 // NextGen E-Commerce</h3>
-                <p>Eine ultraschnelle, Headless-Commerce Plattform mit modernsten Micro-Interaktionen und 3D-Produkt-Rendering.</p>
-            </div>
-            <div class="card">
-                <h3>02 // AI Dashboard</h3>
-                <p>Ein interaktives Analyse-Werkzeug, das komplexe Datensätze mithilfe von künstlicher Intelligenz in Echtzeit visualisiert.</p>
-            </div>
-            <div class="card">
-                <h3>03 // Brand Experience</h3>
-                <p>Ein immersives, WebGL-basiertes Portfolio für eine internationale Designagentur. Preisträger diverser CSS-Awards.</p>
-            </div>
+    <div class="door-frame" id="doorFrame" onclick="openDoor()">
+        <div class="hint">Öffne mich... ✨</div>
+        <div class="door">
+            <div class="doorknob"></div>
         </div>
-    </section>
+    </div>
 
-    <section id="contact">
-        <h2 class="section-title">Lass uns starten</h2>
-        <form id="contact-form" onsubmit="handleSubmit(event)">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" required placeholder="Dein Name">
-            </div>
-            <div class="form-group">
-                <label for="email">E-Mail-Adresse</label>
-                <input type="email" id="email" required placeholder="deine@mail.de">
-            </div>
-            <div class="form-group">
-                <label for="message">Nachricht</label>
-                <textarea id="message" rows="5" required placeholder="Beschreibe dein Projekt..."></textarea>
-            </div>
-            <button type="submit">Nachricht senden</button>
-        </form>
-    </section>
-
-    <footer>
-        <p>&copy; 2026 CyberCraft. Code von Hand gebaut.</p>
-    </footer>
+    <div class="love-letter-container">
+        <h1>Für die wunderbarste Person ❤️</h1>
+        <p>
+            Seit du in mein Leben getreten bist, ist jeder Tag so viel schöner. 
+            Ich wollte dir auf diesem Weg einfach mal sagen, wie unglaublich wichtig du mir bist 
+            und wie sehr ich jede Sekunde mit dir genieße.
+        </p>
+        <p><strong>Ich liebe dich!</strong></p>
+        <div class="heart">❤️</div>
+    </div>
 
     <script>
-        // --- CANVAS PARTIKEL-ANIMATION ---
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-
-        let particles = [];
-        const particleCount = 60;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 1;
-                this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = (Math.random() - 0.5) * 0.5;
-            }
-
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-
-            draw() {
-                ctx.fillStyle = 'rgba(0, 242, 254, 0.3)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Verbinde Partikel mit Linien, wenn sie nah beieinander sind
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    if (distance < 150) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(79, 172, 254, ${0.15 - distance/150})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-
-        initParticles();
-        animate();
-
-        // --- FORMULAR-HANDLING ---
-        function handleSubmit(event) {
-            event.preventDefault();
-            const name = document.getElementById('name').value;
-            alert(`Hi ${name}! Danke für deine Nachricht. Da das hier eine statische Demo ist, wurde die Nachricht natürlich nicht echt gesendet. Aber der Code funktioniert sauber!`);
-            document.getElementById('contact-form').reset();
+        // Funktion, die beim Klick auf die Tür ausgeführt wird
+        function openDoor() {
+            const doorFrame = document.getElementById('doorFrame');
+            doorFrame.classList.add('open');
         }
     </script>
+
 </body>
 </html>
